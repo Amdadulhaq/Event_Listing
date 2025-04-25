@@ -17,4 +17,6 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
+savedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }]
+
 module.exports = mongoose.model('User', userSchema);

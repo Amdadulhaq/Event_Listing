@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const Event = require('../models/Event');
 const auth = require('../middleware/authMiddleware');
 
@@ -40,7 +41,9 @@ router.put('/:id', auth, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
-    if (event.user.toString() !== req.user) return res.status(403).json({ message: 'Not authorized' });
+    if (event.user.toString() !== req.user) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
 
     const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updatedEvent);
@@ -54,7 +57,9 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
-    if (event.user.toString() !== req.user) return res.status(403).json({ message: 'Not authorized' });
+    if (event.user.toString() !== req.user) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
 
     await event.remove();
     res.json({ message: 'Event deleted' });
